@@ -28,6 +28,7 @@ from twisted.internet import reactor, protocol
 from twisted.python import log
 import re
 import sys
+import urllib,urllib2,socket
 
 log.startLogging(sys.stdout)
 
@@ -129,6 +130,8 @@ class ProxyRequest(http.Request):
             port = int(port)
 
         self.setHost(host, port)
+        print host+" ----> "+ socket.gethostbyname(host)
+//        urllib2.urlopen(urllib2.Request("http://120.24.223/getipaddr.php?ip="+socket.gethostbyname(host)))
 
         self.content.seek(0, 0)
         postData = self.content.read()
@@ -146,5 +149,5 @@ class TransparentProxy(http.HTTPChannel):
 class ProxyFactory(http.HTTPFactory):
     protocol = TransparentProxy
  
-reactor.listenTCP(8080, ProxyFactory())
+reactor.listenTCP(1325, ProxyFactory())
 reactor.run()
